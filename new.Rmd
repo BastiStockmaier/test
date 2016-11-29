@@ -1,0 +1,51 @@
+---
+title: "r"
+author: "Seb"
+date: "29 November 2016"
+output: html_document
+---
+
+<img src="img/Variance.jpg" width=200px/>
+
+```{r}
+x1<-c(0,8,12,10)
+x2<-c(8,9,11,12)
+Vars<-cbind(var(x1), var(x2))
+colnames(Vars)<-c("Var X1", "Var X2")
+Vars
+```
+
+## 3) Covariance
+SD and Variance are purely one-dimensional, like heights of all monkeys in a cage or heights of all students in this room. However throughout this course we have repeatedly seen datasets with more than one dimension and usually the aim of our analysis is to describe relationships between those dimensions. For instance our dataset includes the height of all monkeys in a cage but also the femur length and we want to find out if femure length is related to height of the animals. Covariance is a simple way to find out how dimensions vary from the mean with respect to each other. In other words we multiply the difference between each value of the first vector and the mean of the vector by the difference between each value of the second vector and its respective mean, add all these up and divide by (n-1). Again, R has a build in function cov/()
+
+Formula
+
+```{r}
+cov(x1,x2)
+```
+
+Recall that covariance is measured between two dimensions. if we have a dataset with more than 2 dimensions there is more than one covariance measurment that can be calculated. An example is a three dimensional dataset with dimensions x, y, z one could calculate cov(x,y), cov(x,z), cov(z,y). If we calculate all the possible combinations of covariance between the dimensions and put them in a matrix we obtain a covariance matrix (again we can use the cov() function for this).
+
+Formula
+
+```{r}
+x<-c(1,3,6,4)
+y<-c(30,20,10,18)
+z<-c(0.3,0.7,0.5,0.4)
+M<-cbind(x,y,z)
+cov(M)
+```
+
+## 3) Some basic Matrix algebra leads to Eigenvector and Eigenvalues. 
+
+Imagine we are doing Matrix multiplication. Specifically we are multiplying a matrix with a vector. If the resulting vector is an integer of the original vector we call the original vector an EIGENVECTOR, the number we have to multiply the original vector with to obtain the resulting vector is called EIGEMVALUE. The matrix functions as a transforming element, "stretching" the vector without changing its direction. Sounds confusing, it really isn't.
+
+Show the picture here + formula here
+
+
+
+
+Important things to remember about Eigenvectors
+- Eigenvectors can only be found for square matrices.
+- Given a n x n matrix has eigenvectors, there are n of them. E.g. a 3x3 matrix has three Eigenvectors.
+- Even if an Eigenvector is scaled before throwing it in in the transformation, it will still yield the same Eigenvalue! 
