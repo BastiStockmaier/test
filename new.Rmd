@@ -5,7 +5,7 @@ date: "29 November 2016"
 output: html_document
 ---
 
-# Some Background Mathematics (it will make it it easier, promise!)
+## Some Background Mathematics (it will make it it easier, promise!)
 
 First we need to remember some basics background mathematics to understand what a PCA actually does. This might be quite simple, and a lot of what we have done in class will show up again, but it will help to understand the process of Principal component analysis.
 
@@ -15,7 +15,7 @@ Things you need to remember throughout this module are:
 - Covariance and Covariance Matrix
 - Eigenvalues/ Eigenvectors
 
-## 2) Variance
+### 2) Variance
 Besides Standard deviation, Variance is another measure of how spread. It is almost identical to the standard deviation, in fact it is simply the standard deviation squared. R has a build-in functon called var(), and we have derived variance in earlier sections of this course. We will need this information to cover the next section, covariance.
 
 <img src="img/Variance.jpg" width=200px/>
@@ -28,10 +28,10 @@ colnames(Vars)<-c("Var X1", "Var X2")
 Vars
 ```
 
-## 3) Covariance
+### 3) Covariance
 SD and Variance are purely one-dimensional, like heights of all monkeys in a cage or heights of all students in this room. However throughout this course we have repeatedly seen datasets with more than one dimension and usually the aim of our analysis is to describe relationships between those dimensions. For instance our dataset includes the height of all monkeys in a cage but also the femur length and we want to find out if femure length is related to height of the animals. Covariance is a simple way to find out how dimensions vary from the mean with respect to each other. In other words we multiply the difference between each value of the first vector and the mean of the vector by the difference between each value of the second vector and its respective mean, add all these up and divide by (n-1). Again, R has a build in function cov/()
 
-Formula
+<img src="img/covariance.jpg" width=200px/>
 
 ```{r}
 cov(x1,x2)
@@ -39,7 +39,7 @@ cov(x1,x2)
 
 Recall that covariance is measured between two dimensions. if we have a dataset with more than 2 dimensions there is more than one covariance measurment that can be calculated. An example is a three dimensional dataset with dimensions x, y, z one could calculate cov(x,y), cov(x,z), cov(z,y). If we calculate all the possible combinations of covariance between the dimensions and put them in a matrix we obtain a covariance matrix (again we can use the cov() function for this).
 
-Formula
+<img src="img/covariance matrix.jpg" width=200px/>
 
 ```{r}
 x<-c(1,3,6,4)
@@ -49,13 +49,13 @@ M<-cbind(x,y,z)
 cov(M)
 ```
 
-## 3) Some basic Matrix algebra leads to Eigenvector and Eigenvalues. 
+### 3) Some basic Matrix algebra leads to Eigenvector and Eigenvalues. 
 
 Imagine we are doing Matrix multiplication. Specifically we are multiplying a matrix with a vector. If the resulting vector is an integer of the original vector we call the original vector an EIGENVECTOR, the number we have to multiply the original vector with to obtain the resulting vector is called EIGEMVALUE. The matrix functions as a transforming element, "stretching" the vector without changing its direction. Sounds confusing, it really isn't.
 
-Show the picture here + formula here
+<img src="img/Non-eigenvector.jpg" width=200px/>
 
-
+<img src="img/eigenvector.jpg" width=200px/>
 
 
 Important things to remember about Eigenvectors
@@ -159,7 +159,7 @@ E.g
 This is the final step in the PCA, the calculation of our PCA scores. We have choosen the components that we wish to keep in our data and formed feature vectors, we simply take the transpose of the vector and multiply it on the left of the original data set transposed.
 
 
-Formula
+<img src="img/PCA scores.jpg" width=200px/>
 
 ```{r}
 feat.vec.tr<-t(feat.vec)
