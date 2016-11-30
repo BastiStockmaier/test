@@ -55,11 +55,13 @@ Imagine we are doing Matrix multiplication. Specifically we are multiplying a ma
 
 Here comes a non-eigenvectors
 
-<img src="img/Non-eigenvector.jpg" width=260px/>
+<img src="img/Noneigenvector.jpg" width=400px/>
 
-And here comes the eigenvector
+This shows that we if we take a random vector, transformation with the covariance matrix of the dataset will move this vector in both direction and lenght. Interestingly if we would now use the correlation matrix to transform the resulting vector again we would approach a vector where the slope of the vector i.e its direction doesn't change anymore when transformed by the covariance matrix. This specific vector is called an eigenvector:
 
-<img src="img/eigenvector.jpg" width=400px/>
+<img src="img/Eigenvector.jpg" width=400px/>
+
+Transformation of this vector by the covariance matrix does not result in directional changes, instead it only influences the length of the vector. You see that the resulting vector is an integer of the eigenvector multiplied by a certain number (4 in our case). This is the eigenvalue of the eigenvector and is pretty much a measure of data spread! 
 
 
 Important things to remember about Eigenvectors
