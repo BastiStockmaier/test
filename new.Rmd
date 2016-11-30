@@ -53,16 +53,16 @@ Problem with covariances: Covariances are hard to compare!For instance if you ca
 
 ### 3) Correlation matrices
 
-The correlation matrix divides the correlation matrix by something that represents the diversity and scale in the covariates and provides a new value, a correlation which  lays between -1 and 1. E.g for the correlation between variable x and y, we divide it by the square root of the variance of x times the variance of y. 
+The correlation matrix divides the covariance matrix by something that represents the diversity and scale in the covariates and provides a new value, a correlation, which lays between -1 and 1. E.g for the correlation between variable x and y, we divide it by the square root of the variance of x times the variance of y. 
 
-Formula
+<img src="img/correlation.jpg" width=260px/>
 
 Again, we luckily don't have to do this by hand, R has a build-in function cor(). 
 ```{r}
 cor(x,y)
 ```
 
-And again, if the number of variabels increases, cor() will create a correlation matrix for you.
+And again, if the number of variabels increases, cor() will also create a correlation matrix for you.
 
 ```{r}
 cor(M)
