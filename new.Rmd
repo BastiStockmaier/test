@@ -13,6 +13,7 @@ Things you need to remember throughout this module are:
 
 - Variance
 - Covariance and Covariance Matrix
+- Correlation Matrix
 - Eigenvalues/ Eigenvectors
 
 ### 2) Variance
@@ -48,16 +49,36 @@ z<-c(0.3,0.7,0.5,0.4)
 M<-cbind(x,y,z)
 cov(M)
 ```
+Problem with covariances: Covariances are hard to compare!For instance if you calculate covariance of a set of heights and weights (in meters and kilograms, respectively), you will get a different covariance from when you do it in other units (e.g you use the imperial system instead of the metrix system). Also it is hard to tell if e.g weight and height covariate better than than the length of your front teeth, just because the "scale" you calculate the covariance on is different. This is why we have a tool to normalize a covariance matrix, namely: 
 
-### 3) Eigenvectors and Eigenvalues. 
+### 3) Correlation matrices
 
-Imagine we are doing Matrix multiplication. Specifically we are multiplying a matrix with a vector. If the resulting vector is an integer of the original vector we call the original vector an EIGENVECTOR, the number we have to multiply the original vector with to obtain the resulting vector is called EIGEMVALUE. The matrix functions as a transforming element, "stretching" the vector without changing its direction. Sounds confusing, it really isn't.
+The correlation matrix divides the correlation matrix by something that represents the diversity and scale in the covariates and provides a new value, a correlation which  lays between -1 and 1. E.g for the correlation between variable x and y, we divide it by the square root of the variance of x times the variance of y. 
+
+Formula
+
+Again, we luckily don't have to do this by hand, R has a build-in function cor(). 
+```{r}
+cor(x,y)
+```
+
+And again, if the number of variabels increases, cor() will create a correlation matrix for you.
+
+```{r}
+cor(M)
+```
+
+
+
+### 4) Eigenvectors and Eigenvalues. 
+
+Imagine we are doing Matrix multiplication. Specifically we are multiplying a matrix with a vector. If the resulting vector is an integer of the original vector we call the original vector an EIGENVECTOR, the number we have to multiply the original vector with to obtain the resulting vector is called EIGEMVALUE. The matrix functions as a transforming element, "stretching" the vector without changing its direction. Sounds confusing, if we dive into vector space, it really isn't:
 
 Here comes a non-eigenvectors
 
 <img src="img/Noneigenvector.jpg" width=400px/>
 
-This shows that we if we take a random vector, transformation with the covariance matrix of the dataset will move this vector in both direction and lenght. Interestingly if we would now use the correlation matrix to transform the resulting vector again we would approach a vector where the slope of the vector i.e its direction doesn't change anymore when transformed by the covariance matrix. This specific vector is called an eigenvector:
+This shows that we if we take a random vector, transformation with the covariance matrix of the dataset will move this vector in both direction, and length. Interestingly if we would now use the correlation matrix to transform the resulting vector again we would approach a vector where the slope of the vector i.e its direction doesn't change anymore when transformed by the covariance matrix. This specific vector is called an eigenvector:
 
 <img src="img/Eigenvector.jpg" width=400px/>
 
@@ -78,7 +99,7 @@ Well, how would one find those magical eigenvectors? It is only easy(ish) if you
 
 ### 1) Get some data (or in our case make some up).
 
-We will only use two dimensions in this example so we can plot the data at each step to visualize what the PCA does. Imagine we went to a bat cave and we measured eyesize and nostrile size of different individuals. 
+We will only use two dimensions in this example so we can plot the data at each step to visualize what the PCA does. Imagine we went to a bat cave and we measured eyesize and nostrile size of different species. If you examine the dataset you will see that both columns (eyesize and nostril size) are in the same scale/unit. This is important because It will determine if we can use the covariance matrix or if we have to calculate the correlation matrix in upcoming transformation steps. In this case we can use the covariance matrix for transformation, but that will come up later... 
 
 ```{r}
 # create a dataset
@@ -92,7 +113,7 @@ head(Dataset)
 library(ggplot2)
 p<-ggplot(Dataset, aes(x=Bat.eyesize, y=Bat.nostrils))
 p<-p+geom_point(color="red", size=4)
-p<-p+labs(y="Bat nostril size", x= "Bat eyesize")
+p<-p+labs(y="Bat nostril size (cm)", x= "Bat eyesize (cm)")
 p<-p+theme_bw()
 p
 ```
@@ -120,7 +141,7 @@ p
 
 ### 3) Calculate the covariance matrix. 
 
-Again this is pretty simple using the cov() function in R. Since the data is two dimensional, the covariance matrix will be 2 x 2. 
+Again this is pretty simple using the cov() function in R. Since the data is two dimensional, the covariance matrix will be 2 x 2. Remember here that if our dataset includes different scales/units we have to calculate the correlation matrix instead which is defined by the cor() function. 
 ```{r}
 covM<-cov(Dataset[,c(1,2)]) # Only picking the original values from the Dataset
 covM
@@ -132,7 +153,7 @@ covM
 
 Next the PCA will calculate the Eigenvectors and Eigenvalues of our Covariance matrix. We can use the build-in function eigen() for this process. Again, the calculations get very complicated, especially once the dimensionality of the matrix increases. For visualization we will extract the eigenvectors and plot them as lines with our data.
 
-(Since we have two points for each eigenvector (origin (0,0) and its actual value we can calculate slope!)
+(Since we have two points for each eigenvector (origin (0,0) and its actual value) we can calculate slope! It is simply the ratio of the eigenvector. 
 
 
 ```{r}
@@ -209,6 +230,8 @@ title(xlab="Principal Component 1")
 points(x.values$x, x.values$m, col="red", cex=2, pch=16)
 ```
 
-We can see that we got rid of one uneccessary dimension (from two dimensions to one)! Hooray! So here is what the PCA did. It transformed our data so that it is expressed in terms of the patterns between them, where the patterns are the lines that most closely describe the relationship between the data. In the plot above, you can see the original data solely in terms of the vectors we chose. We have changed our data from being in terms of axes x an y and now they are in terms of our 2 eigenvectors. In the case of when the data has reduced dimensionality, ie. we have left some the eigenvectors out, the new data is only shown based on the vectors we decided to keep! 
+The second plot is mainly eyecandy, it is just a number line. We can see that we got rid of one uneccessary dimension (from two dimensions to one)! Hooray! So here is what the PCA did. It transformed our data so that it is expressed in terms of the patterns between them, where the patterns are the lines that most closely describe the relationship between the data. In the plot above, you can see the original data solely in terms of the vectors we chose. We have changed our data from being in terms of axes x an y and now they are in terms of our 2 eigenvectors. In the case of when the data has reduced dimensionality, ie. we have left some the eigenvectors out, the new data is only shown based on the vectors we decided to keep! 
+
+Now this was quite a hustle, and included a lot of steps. Luckily R has build-in functions for these kind of analysis:
 
 
