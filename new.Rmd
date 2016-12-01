@@ -20,16 +20,16 @@ Things you need to remember throughout this module are:
 
 
 #### 1) Variance
-Besides Standard deviation, variance is another measure of how spread out a dataset is. In fact, it is almost identical to the standard deviation. It simply is the standard deviation squared. R has a build-in functon called var(), and we have derived variance in earlier sections of this course. We will need this information to cover the next section, covariance.
+Besides Standard deviation, variance is another measure of how spread out out a dataset is. In fact, it is almost identical to the standard deviation. It simply is the standard deviation squared. R has a build-in functon called var(), and we have derived Variance in earlier sections of this course. We will need this information to cover the next section, covariance.
 
 <img src="img/Variance.jpg" width=260px/>
 
 ```{r}
-x1<-c(0,8,12,10)
+x1<-c(0,8,12,20)
 x2<-c(8,9,11,12)
-Vars<-cbind(var(x1), var(x2))
-colnames(Vars)<-c("Var X1", "Var X2")
-Vars
+Results<-cbind(mean(x1), mean(x2),var(x1), var(x2))
+colnames(Results)<-c("Mean X1", "Mean X2", "Var X1", "Var X2")
+Results
 ```
 
 
@@ -56,9 +56,9 @@ cov(M)
 ```
 However, there are some problems with covariance: 
 
-- Covariances are hard to compare! For instance if you calculate covariance of a set of heights and weights (in meters and kilograms, respectively), you will get a different covariance when you do it in other units (e.g you use the imperial system instead of the metric system). 
+- Covariances are hard to compare! For instance if you calculate covariance of a set of heights and weights (in meters and kilograms, respectively), you will get a different covariance when you use other units (e.g you use the imperial system instead of the metric system). 
 
-- Differences in scale will flaw the covariance matrix. For instance we have a variable in our dataset describing the body length of a whale, and one describing the diameter of its smallest teeth covariance between those two variables will be hard to interpret.
+- Differences in scale will flaw the covariance matrix. For instance we have a variable in our dataset describing the body length of a whale, and one describing the diameter of its smallest tooth. Covariance between those two variables will be hard to interpret.
 
 This is why we have a tool to normalize covariance matrices... 
 
@@ -86,7 +86,7 @@ cor(M)
 
 #### 4) Eigenvectors and Eigenvalues. 
 
-Imagine we are doing Matrix multiplication. Specifically we are multiplying a matrix with a vector (or in math jargon, we "transform" a vector using a matrix). If the resulting vector is an integer of the original vector, we call the original vector an EIGENVECTOR. The number we have to multiply the original vector with to obtain the resulting vector, is called its EIGEMVALUE. The matrix functions as a transforming element, "stretching" the vector without changing its direction. Sounds confusing, let's dive into vector space and see if we can make it easier to understand.
+Imagine we are doing Matrix multiplication. Specifically we are multiplying a matrix with a vector (or in math jargon, we "transform" a vector using a matrix). If the resulting vector is an integer of the original vector, we call the original vector an EIGENVECTOR. The number we have to multiply the original vector with to obtain the resulting vector, is called its EIGENVALUE. The matrix functions as a transforming element, "stretching" the vector without changing its direction. Sounds confusing, let's dive into vector space and see if we can make it easier to understand.
 
 Non-eigenvector
 
@@ -98,7 +98,7 @@ And than there are those magical eigenvectors:
 
 <img src="img/Eigenvector.jpg" width=400px/>
 
-Transformation of this vector by the covariance matrix does not result in directional changes. Instead it only influences the length of the vector. You see that the resulting vector is an integer of the Eigenvector multiplied by a certain number (4 in our case). This is the eigenvalue of the Eigenvector, and is pretty much a measure of data spread! Together, Eigenvectors and their corresponding eigenvalue represent direction and spread that explain variance in our dataset!
+Transformation of this vector by the covariance matrix does not result in directional changes. Instead it only influences the length of the vector. You see that the resulting vector is an integer of the Eigenvector multiplied by a certain number (4 in our case). This is the Eigenvalue of the Eigenvector, and is pretty much a measure of data spread! Note that together, Eigenvectors and their corresponding Eigenvalue represent direction and spread that explain variance in our dataset!
 
 
 Important things to remember about Eigenvectors
@@ -106,7 +106,7 @@ Important things to remember about Eigenvectors
 - Eigenvectors can only be found for square matrices.
 - Given a n x n matrix there will usually be n eigenvectors. E.g. a 3 x 3 matrix has three Eigenvectors.
 - Even if an Eigenvector is scaled before throwing it in in the transformation, it will still yield the same Eigenvalue! 
-- All Eigenvectors are perpendicular, at right angles to each other which means we can express data in terms of these eigenvectors!
+- All Eigenvectors are perpendicular. This means they are at right angles to each other, and we can express data in terms of them!
 
 Well, how would one find those magical Eigenvectors? It is only easy(ish) if you have small matrix. With larger matrices, complicated iterative methods come into play, which are beyond of what we want to cover today --> Today we will use R, and its eigen() function (:
 
@@ -121,7 +121,7 @@ Well, how would one find those magical Eigenvectors? It is only easy(ish) if you
 
 #### 1) Get some data (or in our case make some up).
 
-We will only use two dimensions in this example so we can plot the data at each step to visualize what the PCA does. Imagine we went to a bat cave and we measured eyesize and nostrile size of individuals from different species. If you examine the dataset you will see that both columns (eyesize and nostril size) are in the same scale/unit. This is important because It will determine if we can use the covariance matrix, or if we have to calculate the correlation matrix in upcoming transformation steps (more later!). In this case we can use the covariance matrix for transformation.
+We will only use two dimensions in this example, so we can plot the data at each step to visualize what the PCA does. Imagine we went to a bat cave and we measured eyesize and nostrile size of individuals from different species. If you examine the dataset, you will see that both columns (eyesize and nostril size) are in the same scale/unit. This is important because It will determine if we can use the covariance matrix, or if we have to calculate the correlation matrix in upcoming transformation steps (more later!). In this case we can use the covariance matrix for transformation.
 
 
 ```{r}
@@ -150,7 +150,7 @@ p
 
 #### 2) Centering of the data by substracting the mean
 
-For a PCA to work properly we have to substract the mean from each of the data dimensions. This will put the origin 0 in the center of our "data cloud", it will center it. We will add the adjusted values to the original dataset in the first part of the code, and then plot the data to see how things have changed.  
+For a PCA to work properly, we have to substract the mean from each of the data dimensions. This will put the origin 0 in the center of our "data cloud", it will center it. We will add the adjusted values to the original dataset in the first part of the code, and then plot the data to see how things have changed.  
 
 ```{r}
 
@@ -188,9 +188,9 @@ Note that the non-diagonal elements in the covariance matrix are positive, we sh
 
 #### 4) Calculation of Eigenvectors and Eigenvalues
 
-Next the PCA will calculate the Eigenvectors and Eigenvalues of our Covariance matrix. We can use the build-in function eigen() for this process. As said before, the calculations get very complicated. Especially once the dimensionality of the matrix increases. For visualization we will extract the eigenvectors, and plot them as directional lines with our data (we will show the direction of data spread).
+Next, the PCA will calculate the Eigenvectors and Eigenvalues of our Covariance matrix. We can use the build-in function eigen() for this process. As said before, the calculations get very complicated. Especially once the dimensionality of the matrix increases. For visualization we will extract the Eigenvectors, and plot them as directional lines with our data (this will prove that the eigenvectors describe the direction of data spread).
 
-(Since we have two points for each eigenvector (origin (0,0) and its actual value), we can calculate the slope! It is simply the ratio of the eigenvector. 
+(Since we have two points for each Eigenvector (origin (0,0) and its actual value), we can calculate the slope! It is simply the ratio of the Eigenvector. 
 
 
 ```{r}
@@ -219,7 +219,7 @@ If you look at the plot, you can see that the data has quite a strong pattern. A
 
 #### 5) Choosing principal components
 
-The Eigenvector with the highest eigenvalue is also called the first principle component of the data set (PC 1). In our example it is represented by the green line. It is the most significant relationship between the data dimensions. Therefore in the next step the PCA orders the eigenvectors by eigenvalue from highest to lowest (again, remember the Eigenvalue is pretty much a measure of data spread), and we can decide to ignore components of lesser significance. This process is called creating a feature vector. If you leave components out, the final dataset will have less dimensions than the original one! There are several diagnostic tools for visual PC selection, and we will talk about one of them later. 
+The Eigenvector with the highest eigenvalue is also called the first principle component of the data set (PC 1). In our example it is represented by the green line. It is the most significant relationship between the data dimensions. Therefore in the next step the PCA orders the Eigenvectors by Eigenvalue from highest to lowest (again, remember the Eigenvalue is pretty much a measure of data spread), and we can decide to ignore components of lesser significance. This process is called creating a feature vector. If you leave components out, the final dataset will have less dimensions than the original one! There are several diagnostic tools for visual PC selection, and we will talk about one of them later. 
 
 Below you will see how we picked both eigenvectors (PC 1 and 2) from our result derived with the eigen() function. 
 
@@ -249,6 +249,7 @@ Dataset<-cbind(Dataset,PCA_scores)
 ```
 
 First, lets see what happens if we plot both eigenvectors (both principal components)
+In this case we keep both dimensions.
 ```{r}
 p<-ggplot(Dataset, aes(x=x, y=y, color=as.factor(Bat.species)))
 p<-p+geom_point(size=4)
@@ -274,7 +275,7 @@ p<-p+geom_hline(yintercept=0, color="green")
 p
 ```
 
-The second plot is mainly eyecandy, it is just a number line. We can see that we got rid of one uneccessary dimension (from two dimensions to one)! Hooray, the PCA did its job! 
+The second plot is mainly eyecandy, it is just a number line because we want to demonstrate that we compressed the dataset from two to one dimension without loosing too much information. We got rid of one uneccessary dimension because the variance it contributed to the data was insignificant! Hooray, the PCA did its job! 
 
 Now this was quite a hustle, and included a lot of steps. Luckily R has build-in functions for these kind of analysis:
 
