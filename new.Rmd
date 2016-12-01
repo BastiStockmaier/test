@@ -7,6 +7,7 @@ output: html_document
 
 ### Some Background Mathematics...
 
+
 To understand what Principal Component Analysis (PCA) actually does, we need to remember some basics background mathematics. This might be quite simple, and a lot of what we have done in class will show up again, but it will help to understand the process of PCA.
 
 Things you need to remember throughout this module are:
@@ -15,6 +16,8 @@ Things you need to remember throughout this module are:
 - Covariance and Covariance Matrix
 - Correlation Matrix
 - Eigenvalues/ Eigenvectors
+
+
 
 #### 1) Variance
 Besides Standard deviation, variance is another measure of how spread a dataset is. In fact, it is almost identical to the standard deviation. It simply is the standard deviation squared. R has a build-in functon called var(), and we have derived variance in earlier sections of this course. We will need this information to cover the next section, covariance.
@@ -28,6 +31,8 @@ Vars<-cbind(var(x1), var(x2))
 colnames(Vars)<-c("Var X1", "Var X2")
 Vars
 ```
+
+
 
 #### 2) Covariance
 SD and Variance are purely one-dimensional, like for heights of all monkeys in a cage, or armlength of all students in this room. However throughout this course we have repeatedly seen datasets with more than one dimension. Usually the aim of our analysis is to describe relationships between those dimensions. For instance our dataset includes the height of all monkeys but also the arm lenght, and we want to find out how related those dimensions are. Covariance is a simple way to find out how dimensions vary from the mean with respect to each other. Again, R has a build in function cov().
@@ -58,7 +63,8 @@ However, there are some problems with covariance:
 This is why we have a tool to normalize covariance matrices... 
 
 
-### 3) Correlation matrices
+
+#### 3) Correlation matrices
 
 The correlation matrix divides the covariance matrix by something that represents the diversity and scale in the covariates and provides a new value, a correlation. This correlation lays between -1 and 1. E.g for the correlation between variable x and y, we divide it by the square root of the variance of x times the variance of y. 
 
@@ -74,6 +80,7 @@ And again, if the number of variabels increases, cor() will also create a correl
 ```{r}
 cor(M)
 ```
+
 
 
 
@@ -105,7 +112,10 @@ Well, how would one find those magical eigenvectors? It is only easy(ish) if you
 
 
 
+
 ### Alright, with this knowledge we should be ready to go and learn a little bit more about PCA. PCA follows a fairly simple and straightforward recipe:
+
+
 
 
 
@@ -137,6 +147,7 @@ p
 ```
 
 
+
 #### 2) Centering of the data by substracting the mean
 
 For a PCA to work properly we have to substract the mean from each of the data dimensions. This will put the origin 0 in the center of our "data cloud", it will center it. We will add the adjusted values to the original dataset in the first part of the code, and then plot the data to see how things have changed.  
@@ -159,6 +170,8 @@ p
 ```
 
 
+
+
 #### 3) Calculate the covariance matrix. 
 
 Again this is pretty simple using the cov() function in R. Since the data is two dimensional, the covariance matrix will be 2 x 2. Remember here that if our dataset includes different scales/units, we have to calculate the correlation matrix instead which is defined by the cor() function. 
@@ -169,6 +182,8 @@ covM
 ```
 
 See that the non-diagonal elements in the covariance matrix are positive, we should expect that both x and y increase together (which they actually do)!
+
+
 
 
 #### 4) Calculation of Eigenvectors and Eigenvalues
@@ -202,6 +217,7 @@ If you look at the plot, you can see that the data has quite a strong pattern. A
 
 
 
+
 #### 5) Choosing principal components
 
 The eigenvector with the highest eigenvalue is also called the first principle component of the data set (PC 1). In our example it is represented by the green line. It is the most significant relationship between the data dimensions. Therefore in the next step the PCA orders the eigenvectors by eigenvalue from highest to lowest (again, remember the eigenvalue is pretty much a measure of length!), and we can decide to ignore components of lesser significance. This process is called creating a feature vector. If you leave components out, the final dataset will have less dimensions than the original one! There are several diagnostic tools for visual PC selection, and we will talk about one of them later. 
@@ -212,6 +228,8 @@ Below you will see how we picked both eigenvectors (PC 1 and 2) from our result 
 feat.vec<-Eigen$vectors
 feat.vec
 ```
+
+
 
 
 #### 6) Deriving the new data set (PCA scores), projecting the data to the new dimensions 
